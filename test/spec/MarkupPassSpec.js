@@ -35,3 +35,31 @@ describe('Markup Pass Suite Map of tags', function () {
         expect( assertionTags[0].children[0].tagName ).toEqual('A');
     });    
 });
+
+describe('Markup Pass Suite JSON format extraction', function () {
+    it('Simple JSON structure', function () {
+        var assertionFormat = MarkupPass.extractFormat({
+            target: '<div><a href="http://www.google.com">Googlr</a></div>'
+        });
+
+        var finallyResultFormat = (function () {
+            var format = {
+                "content": {
+                    "attrs": {
+                        "href": "http://www.google.com"
+                    }, 
+                    
+                    "content": {
+                        "text": "Googlr"
+                    }, 
+                    
+                    "type": "a"
+                }
+            }
+
+            return JSON.stringify( format );
+        } ());
+
+        expect( assertionFormat ).toEqual( finallyResultFormat );
+    });   
+});

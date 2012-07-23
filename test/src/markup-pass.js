@@ -77,6 +77,17 @@ var MarkupPass = (function ( win, doc ) {
 
             return output;
         },
+
+        extractFormat: function ( settings ) {
+            var self = this,
+                output = {};
+
+            if ( settings && settings['target'] ) {
+                // Do the extraction of json
+            }
+
+            return output;
+        },
     };
 
     return new core;
