@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Markup Pass: Create a JSON structure based on HTML</title>
+</head>
+<body>
+    <div class="holder-main">
+       <section>
+           <header></header>
+           <article></article>
+           <footer></footer>
+       </section>
+    </div>
+
+    <script type="text/javascript" src="markup-pass.js" ></script>
+    <script type="text/javascript">
+        var windowLoaded = (function () {
+            var output = false;
+
+            window.onload = (function() {
+
+                output = true;
+            } ());
+
+            return output;
+        } ());
+    </script>
+</body>
+</html>
