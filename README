@@ -1,0 +1,10 @@
+Markup Pass
+===========
+
+Simple translation of DOM fragment from html to json.
+
+Todos:
+    
+    - Create valid json structure
+
+    - Valid json structure
