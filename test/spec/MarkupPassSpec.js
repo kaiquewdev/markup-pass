@@ -36,30 +36,62 @@ describe('Markup Pass Suite Map of tags', function () {
     });    
 });
 
-describe('Markup Pass Suite JSON format extraction', function () {
+describe('Markup Pass Suite JSON format interpreter', function () {
     it('Simple JSON structure', function () {
-        var assertionFormat = MarkupPass.extractFormat({
-            target: '<div><a href="http://www.google.com">Googlr</a></div>'
+        var assertionFormat = MarkupPass.interpreterStructure({
+            target: MarkupPass.getTrack({
+                target: '<div class="test">testing</div>'
+            })[0]
         });
 
         var finallyResultFormat = (function () {
             var format = {
                 "content": {
                     "attrs": {
-                        "href": "http://www.google.com"
-                    }, 
-                    
+                        "class": "test"
+                    },
+
                     "content": {
-                        "text": "Googlr"
-                    }, 
-                    
-                    "type": "a"
+                        "text": "testing"
+                    }
                 }
             }
 
             return JSON.stringify( format );
         } ());
 
-        expect( assertionFormat ).toEqual( finallyResultFormat );
+        expect( JSON.stringify( assertionFormat ) ).toEqual( finallyResultFormat );
     });   
+});
+
+describe('Markup Pass Suite JSON format extraction', function () {
+    it('Extraction format', function () {
+        var assertionFormat = MarkupPass.extractFormat({
+            target: '<div class="test"><a href="http://www.google.com">google</a></div>'
+        });
+
+        var finallyResultFormat = (function () {
+            var format = [{
+                "content": {
+                    "attrs": {
+                        "class": "test"
+                    },
+                    
+                    "content": {
+                        "attrs": {
+                            "href": "http://www.google.com"
+                        },
+
+                        "content": {
+                            "text": "google"
+                        }
+                    }
+                }
+            }]
+
+            return JSON.stringify( format );
+        } ());
+
+        expect( JSON.stringify( assertionFormat ) ).toEqual( finallyResultFormat );
+    });
 });

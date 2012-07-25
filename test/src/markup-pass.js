@@ -78,12 +78,88 @@ var MarkupPass = (function ( win, doc ) {
             return output;
         },
 
-        extractFormat: function ( settings ) {
-            var self = this,
-                output = {};
+        interpreterStructure: function ( settings ) {
+            var output = {
+                content: {}
+            },
+            target;
 
             if ( settings && settings['target'] ) {
-                // Do the extraction of json
+                target = settings['target'];
+
+                var el = {
+                    attr: target.attributes,
+                    type: target.tagName.toLowerCase(),
+                    text: target.innerText
+                };
+
+                if ( el.attr.length > 0 ) {
+                    output['content']['attrs'] = {};
+
+                    for ( var i = 0, len = el.attr.length; i < len; i++ ) {
+                        output['content']['attrs'][ el.attr[ i ]['name'] ] = el.attr[ i ]['value'];
+                    }
+                } if ( el.type && el.type !== 'div' ) {
+                    output['content']['type'] = el.type;
+                } if ( target.childNodes.length === 1 && target.childNodes[0].tagName === undefined ) {
+                    output['content']['content'] = {
+                        text: el.text
+                    };
+                }
+            }
+
+            return output;
+        },
+
+        extractFormat: function ( settings ) {
+            var self = this,
+                output = [],
+                levels = {
+                    'index': [],
+                    'child': []
+                },
+                target;
+
+            var extraction = function () {
+            };
+
+            if ( settings && settings['target'] ) {
+                target = self.getTrack({
+                    target: settings['target']
+                });
+
+                // Recursion extraction
+                var i = 0,
+                    len = target.length;
+
+                while ( true ) {
+                    var currentElement,
+                        memoryElement;
+
+                    if ( i < len ) {
+                        currentElement = target[ i ];
+
+                        output.push( self.interpreterStructure( currentElement ) );
+
+                        if ( currentElement.children.length > 0 ) {
+                            var childrens = currentElement.children;
+
+                            for ( var j = 0; j < childrens.length; j++ ) {
+                                var currentChildElement = childrens[j];
+
+                                output[ i ]['content'] = ( 
+                                    self.interpreterStructure({
+                                        target: currentChildElement
+                                    })
+                                );
+                            }
+                        }
+                    } else {
+                        break;
+                    }
+
+                    i++;
+                }
             }
 
             return output;
