@@ -139,7 +139,11 @@ var MarkupPass = (function ( win, doc ) {
                     if ( i < len ) {
                         currentElement = target[ i ];
 
-                        output.push( self.interpreterStructure( currentElement ) );
+                        var content = self.interpreterStructure({
+                            target: currentElement
+                        });
+
+                        output[ i ] = content;
 
                         if ( currentElement.children.length > 0 ) {
                             var childrens = currentElement.children;
@@ -147,7 +151,7 @@ var MarkupPass = (function ( win, doc ) {
                             for ( var j = 0; j < childrens.length; j++ ) {
                                 var currentChildElement = childrens[j];
 
-                                output[ i ]['content'] = ( 
+                                output[ i ]['content']['content'] = ( 
                                     self.interpreterStructure({
                                         target: currentChildElement
                                     })

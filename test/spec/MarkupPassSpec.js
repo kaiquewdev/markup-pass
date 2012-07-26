@@ -71,23 +71,7 @@ describe('Markup Pass Suite JSON format extraction', function () {
         });
 
         var finallyResultFormat = (function () {
-            var format = [{
-                "content": {
-                    "attrs": {
-                        "class": "test"
-                    },
-                    
-                    "content": {
-                        "attrs": {
-                            "href": "http://www.google.com"
-                        },
-
-                        "content": {
-                            "text": "google"
-                        }
-                    }
-                }
-            }]
+            var format = [{"content":{"attrs":{"class":"test"},"content":{"content":{"attrs":{"href":"http://www.google.com"},"type":"a","content":{"text":"google"}}}}}]
 
             return JSON.stringify( format );
         } ());
