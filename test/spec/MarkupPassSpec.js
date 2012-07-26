@@ -64,6 +64,20 @@ describe('Markup Pass Suite JSON format interpreter', function () {
     });   
 });
 
+describe('Markup Pass Suite Array indentifier', function () {
+    it('Is array: empty', function () {
+        expect( MarkupPass.isArray( [] ) ).toEqual( true );
+    });
+
+    it('Is array: fill', function () {
+        expect( MarkupPass.isArray( [1, 2, 3, []] ) ).toEqual( true );
+    });
+
+    it('Not is array: in string', function () {
+        expect( MarkupPass.isArray( '[1, 2, 3, []]' ) ).toEqual( false );
+    });
+});
+
 describe('Markup Pass Suite JSON format extraction', function () {
     it('Extraction format', function () {
         var assertionFormat = MarkupPass.extractFormat({

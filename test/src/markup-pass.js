@@ -61,6 +61,16 @@ var MarkupPass = (function ( win, doc ) {
             return output;
         },
 
+        isArray: function ( target ) {
+            var output = false;
+
+            if ( target.constructor.toString().indexOf( 'Array()' ) > -1 ) {
+                output = true;
+            }
+
+            return output;
+        },
+
         getTrack: function ( settings ) {
             var self = this, 
                 output = [];
@@ -120,7 +130,58 @@ var MarkupPass = (function ( win, doc ) {
                 },
                 target;
 
-            var extraction = function () {
+            var extraction = function ( target, fn ) {
+                target = target || [];
+                fn = fn || function () {};
+
+                if ( target ) {
+                    var i = 0,
+                        len = target.length;
+
+                    while ( true ) {
+                        var currentElement;
+
+                        if ( i < len ) {
+                            currentElement = target[ i ];
+
+                            var content = self.interpreterStructure({
+                                target: currentElement
+                            });
+
+                            output[ i ] = content;
+
+                            if ( currentElement.children.length > 0 ) {
+                                var currentChildrens = currentElement.children,
+                                    outerElements = [],
+                                    maxRecursion = 50;
+                                
+                                do {
+                                    
+                                } while ( maxRecursion-- );
+
+                                /*for ( var j = 0; j < childrens.length; j++ ) {
+                                    var currentChildElement = childrens[j];
+
+                                    output[ i ]['content']['content'] = ( 
+                                        self.interpreterStructure({
+                                            target: currentChildElement
+                                        })
+                                    );
+
+                                    if ( currentChildElement.children.length > 0 ) {
+                                        childrens = currentChildElement.children;
+                                    }
+                                }*/
+                            }
+
+                            fn( currentElement );
+                        } else {
+                            break;
+                        }
+
+                        i++;
+                    }
+                }
             };
 
             if ( settings && settings['target'] ) {
@@ -129,41 +190,7 @@ var MarkupPass = (function ( win, doc ) {
                 });
 
                 // Recursion extraction
-                var i = 0,
-                    len = target.length;
-
-                while ( true ) {
-                    var currentElement,
-                        memoryElement;
-
-                    if ( i < len ) {
-                        currentElement = target[ i ];
-
-                        var content = self.interpreterStructure({
-                            target: currentElement
-                        });
-
-                        output[ i ] = content;
-
-                        if ( currentElement.children.length > 0 ) {
-                            var childrens = currentElement.children;
-
-                            for ( var j = 0; j < childrens.length; j++ ) {
-                                var currentChildElement = childrens[j];
-
-                                output[ i ]['content']['content'] = ( 
-                                    self.interpreterStructure({
-                                        target: currentChildElement
-                                    })
-                                );
-                            }
-                        }
-                    } else {
-                        break;
-                    }
-
-                    i++;
-                }
+                extraction( target );
             }
 
             return output;
